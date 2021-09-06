@@ -96,6 +96,7 @@ def return_timetable_on_day(day: str, school_id: int):
 
 
 def add_new_class(values: tuple):
+    """Добавляет новый класс в БД"""
     cursor.execute('INSERT INTO schools(school_name, class_name, editor_token) VALUES(?, ?, ?);', values)
     conn.commit()
 
