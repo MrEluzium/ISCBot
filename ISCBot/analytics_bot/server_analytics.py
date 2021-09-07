@@ -22,19 +22,17 @@ import string
 
 from aiogram import Bot, Dispatcher, types, executor
 
-import db_analytics
-import server
-import keyboard_analytics
+from utils import *
 
-bot_ = Bot(token='')
-dp = Dispatcher(bot_)
+bot = Bot(token='')
+dp = Dispatcher(bot)
 
 logging.basicConfig(level=logging.INFO)
 
 
 @dp.message_handler(commands='start')
 async def send_welcome(message: types.Message):
-    if message.from_user.id == 599516086:
+    if message.from_user.id != 599516086:
         await message.answer('📱Для взаимодествия с ботом, используй меню кнопок👇',
                              reply_markup=keyboard_analytics.main_keyboard())
     else:
@@ -62,19 +60,19 @@ async def total_class(callback_query: types.CallbackQuery):
                                                reply_markup=keyboard_analytics.main_keyboard())
 
 
-@dp.callback_query_handler(text='create_newsletter')
-async def create_newsletter(callback_query: types.CallbackQuery):
-    await callback_query.message.answer('Теперь вводи текст для рассылки, но в начале добавь *')
+# @dp.callback_query_handler(text='create_newsletter')
+# async def create_newsletter(callback_query: types.CallbackQuery):
+#     await callback_query.message.answer('Теперь вводи текст для рассылки, но в начале добавь *')
 
 
-@dp.message_handler(lambda message: message.text.startswith('*'))
-async def input_newsletter(message: types.Message):
-    newsletter = message.text.strip('*').strip()
-
-    all_user_id = [user_id for tuple_user_id in db_analytics.get_return_user_id() for user_id in tuple_user_id]
-    for user_id in all_user_id:
-        await server.bot.send_message(user_id, newsletter)
-        time.sleep(0.5)
+# @dp.message_handler(lambda message: message.text.startswith('*'))
+# async def input_newsletter(message: types.Message):
+#     newsletter = message.text.strip('*').strip()
+#
+#     all_user_id = [user_id for tuple_user_id in db_analytics.get_return_user_id() for user_id in tuple_user_id]
+#     for user_id in all_user_id:
+#         await server.bot.send_message(user_id, newsletter)
+#         time.sleep(0.5)
 
 
 @dp.callback_query_handler(text='signup_class')
@@ -91,6 +89,7 @@ async def input_school_name(message: types.Message):
 
 @dp.message_handler(lambda message: message.text.startswith('Класс:'))
 async def input_class_name(message: types.Message):
+    # TODO Remake new class registration to new db model
     class_name = message.text[7:]
 
     token = 'token' + ''.join(random.choice(string.ascii_lowercase) for i in range(6))

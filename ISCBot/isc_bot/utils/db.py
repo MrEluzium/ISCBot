@@ -19,7 +19,7 @@ import sqlite3
 from typing import Tuple
 
 
-conn = sqlite3.connect('service.db', check_same_thread=False)
+conn = sqlite3.connect('../service.db', check_same_thread=False)
 cursor = conn.cursor()
 
 
@@ -120,7 +120,7 @@ def add_new_class(values: tuple):
 
 def init_db():
     """Инициализирует БД"""
-    with open("createdb.sql", "r") as f:
+    with open("utils/createdb.sql", "r") as f:
         sql = f.read()
     cursor.executescript(sql)
     conn.commit()

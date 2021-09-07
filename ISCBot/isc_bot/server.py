@@ -22,9 +22,8 @@ import string
 
 from aiogram import Bot, Dispatcher, types, executor
 
-import keyboard
+from utils import *
 import logic
-import db
 
 bot = Bot(token='')
 dp = Dispatcher(bot)
@@ -48,12 +47,12 @@ async def new_send_welcome(message: types.Message):
             await message.answer(
                 f'🙋‍♂️Привет, {username}!\nНажми на кнопку класса в котором ты учишься. Если твоего класса'
                 f' нет в списке — нажми кнопку зарегистрировать класс и следуй инструкции.',
-                reply_markup=keyboard.all_schools())
+                reply_markup=keyboard.all_schools(db.return_all_schools()))
         else:
             await message.answer(
                 f'🙋‍♂️Привет!\nНажми на кнопку класса в котором ты учишься. Если твоего класса'
                 f' нет в списке — нажми кнопку зарегистрировать класс и следуй инструкции.',
-                reply_markup=keyboard.all_schools())
+                reply_markup=keyboard.all_schools(db.return_all_schools()))
 
 
 @dp.callback_query_handler(lambda c: c.data and c.data.startswith('cls'))
